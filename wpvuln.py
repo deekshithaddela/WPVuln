@@ -13,7 +13,7 @@ user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, lik
 headers = { 'User-Agent' : user_agent }
 file = open("vulnurls.txt", "r")
 for line in file:
-    dir=line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
+    dir="static/files/"+line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
     print(dir)
     if not os.path.exists(dir):
         os.makedirs(dir)

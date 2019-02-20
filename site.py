@@ -38,23 +38,31 @@ def url():
 def urlsfile():
     return render_template('urlsfile.html')
 
+@app.route('/vulnfile/', methods = ['GET', 'POST'])
+def enter_url():
+   if request.method == 'POST':
+      text = request.form['url']
+      from wpvuln1 import Wpvuln
+      Wpvuln(text)
+      import shutil
+      dir=text[text.find('://www.')+7:text.find('.',text.find('://www.')+7)]
+      path = os.getcwd()+"/static/files/"+dir
+      shutil.make_archive("/static/files/"+dir, 'zip', path)
+      return render_template('vulnfile.html')
+
 @app.route('/vulnfiles/', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
       f = request.files['file']
       f.save(secure_filename(f.filename))
-      #import wpvuln
-
-      import os
-      i=""
+      import wpvuln
+      import shutil
       file = open(f.filename, "r")
       for line in file:
           dir=line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
-          path = os.getcwd()+"/"+dir
-          for filename in os.listdir(path):
-              i=i+filename+"\n"
-
-      return i
+          path = os.getcwd()+"/static/files/"+dir
+          shutil.make_archive("/static/files/"+dir, 'zip', path)
+      return render_template('vulnfiles.html')
 
 @app.errorhandler(404)
 def page_not_found(e):

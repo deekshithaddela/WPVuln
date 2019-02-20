@@ -40,8 +40,8 @@ iframe, object, embed {
 }
 
 .center-text {
-	text-align: center
-}
+	text-align: center;
+	font-family: Helvetica, sans-serif;}
 
 .navlinks {
 	margin:40px auto;

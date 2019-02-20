@@ -14,7 +14,7 @@ def Wpvuln(url):
     user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.97 Safari/537.36'
     headers = { 'User-Agent' : user_agent }
     line=url
-    dir=line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
+    dir="static/files/"+line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
     print(dir)
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -29,8 +29,8 @@ def Wpvuln(url):
     f2 = open(dir+"/themes.txt", "w")
     loc1 = (dir+"/plugins.xls")
     loc2 = (dir+"/themes.xls")
-    loc3 = (dir+"/pluginsvuln.xls")
-    loc4 = (dir+"/themesvuln.xls")
+    loc3 = (dir+"/vulnplugins.xls")
+    loc4 = (dir+"/vulnthemes.xls")
     wb1 = xlwt.Workbook()
     sheet1 = wb1.add_sheet("Sheet1",cell_overwrite_ok=True)
     wb2 = xlwt.Workbook()
