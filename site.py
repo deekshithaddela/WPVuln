@@ -1,4 +1,6 @@
-import sys, os
+import sys
+import shutil
+import os
 from flask import (
     Flask,
     Markup,
@@ -6,6 +8,8 @@ from flask import (
     render_template_string,
     request,
     send_file )
+from os import listdir
+import zipfile
 from flask_frozen import Freezer
 from werkzeug import secure_filename
 from shelljob import proc
@@ -42,12 +46,15 @@ def urlsfile():
 def enter_url():
    if request.method == 'POST':
       text = request.form['url']
+      shutil.rmtree("static/files")
+      os.makedirs("static/files")
       from wpvuln1 import Wpvuln
       Wpvuln(text)
-      import shutil
       dir=text[text.find('://www.')+7:text.find('.',text.find('://www.')+7)]
-      path = os.getcwd()+"/static/files/"+dir
-      shutil.make_archive("/static/files/"+dir, 'zip', path)
+      os.chdir(os.getcwd()+"/static/files")
+      path = str(os.getcwd())+dir
+      shutil.make_archive("download", 'zip', path)
+      os.chdir("C:/Users/daddela/Pictures/wpvuln")
       return render_template('vulnfile.html')
 
 @app.route('/vulnfiles/', methods = ['GET', 'POST'])
@@ -55,13 +62,23 @@ def upload_file():
    if request.method == 'POST':
       f = request.files['file']
       f.save(secure_filename(f.filename))
+      shutil.rmtree("static/files")
+      os.makedirs("static/files")
       import wpvuln
-      import shutil
       file = open(f.filename, "r")
       for line in file:
           dir=line[line.find('://www.')+7:line.find('.',line.find('://www.')+7)]
           path = os.getcwd()+"/static/files/"+dir
-          shutil.make_archive("/static/files/"+dir, 'zip', path)
+          shutil.make_archive(path, 'zip', path)
+      os.chdir(os.getcwd()+"/static/files")
+      zip = zipfile.ZipFile('download.zip', 'w')
+      for f in listdir(os.getcwd()):
+          if f.endswith('.' + "zip") and 'download.zip' not in f :
+              print(f)
+              zip.write(f, compress_type=zipfile.ZIP_DEFLATED)
+      zip.close()
+      file.close()
+      os.chdir("C:/Users/daddela/Pictures/wpvuln")
       return render_template('vulnfiles.html')
 
 @app.errorhandler(404)

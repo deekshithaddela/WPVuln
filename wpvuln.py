@@ -55,7 +55,7 @@ for line in file:
                 if l[-1]!='/':
                     queue.discard(l+'/')
                 queue.discard(l)
-            if len(queue)==0 or m>5:
+            if len(queue)==0 or m>50:
                 break
         l=1
         m+=1
